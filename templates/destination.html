@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>Travels</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+        <a class="" href="/dashboard">Home</a>
+        <a href="/logout" class="logout">Logout</a>
+       
+        <table class="table">
+          <tbody>
+             {% if trips_datails: %}
+                    {% for trips_datail in trips_datails: %}
+                    <h1>{{ trips_datail['Destination'] }}</h1>
+                    <tr>
+                        <td><strong>Name {{ trips_datail['name'] }}</strong></td>
+                        <td><strong>Description {{ trips_datail['Description'] }}</strong></td>
+                        <td>{{ trips_datail['Date_from'].strftime('%m-%d-%Y') }}</td>
+                        <td>{{ trips_datail['Date_to'].strftime('%m-%d-%Y') }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+          </tbody>
+        </table>
+		<h1>Others Users joining Plan</h1>
+     	<table class="table">
+		  <tbody>
+		    {% if trips_datails: %}
+                    {% for trips_datail in trips_datails: %}
+                    <tr>
+                        <td><strong>Name {{ trips_datail['name'] }}</strong></td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+		  </tbody>
+		</table>
+</div>      
+</body>
+</html>

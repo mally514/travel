@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>Travels</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+        <h1>Hello, {{ user[0]['name'] }}!!</h1>
+        <a href="/logout" class="logout">Logout</a>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert-danger" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %} 
+        {% endwith %}
+        <h1>Your Trips Schedules</h1>
+     	<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">Desnation</th>
+		      <th scope="col">Travel start date</th>
+		      <th scope="col">Travel end date</th>
+		      <th scope="col">Plan</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	 {% if mytrips: %}
+                    {% for my_trips in mytrips: %}
+                    <tr>
+                        <td><a href="#">{{ my_trips['Destination'] }}</a></td>
+                        <td>{{ my_trips['Date_from'].strftime('%m-%d-%Y') }}</td>
+                        <td>{{ my_trips['Date_to'].strftime('%m-%d-%Y') }}</td>
+                        <td>
+                           
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+		  </tbody>
+		</table>
+		<h1>Others Users Travel Plan</h1>
+     	<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">Name</th>
+		      <th scope="col">Desnation</th>
+		      <th scope="col">Travel start date</th>
+		      <th scope="col">Travel end date</th>
+		      <th scope="col">Do you want  to join</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		     {% if others_trips: %}
+                    {% for otherstrips in others_trips: %}
+                    <tr>
+
+                        <td><strong>{{ otherstrips['name'] }}</strong></td>
+                        <td><a href="/destination/{{ otherstrips['travel_id'] }}">{{ otherstrips['Destination'] }}</a></td>
+                        <td>{{ otherstrips['Date_from'].strftime('%m-%d-%Y') }}</td>
+                        <td>{{ otherstrips['Date_to'].strftime('%m-%d-%Y') }}</td>
+                        <td>
+                            <form method="POST" action="join">
+                                <input type="hidden" class="travel_id" name="travel_id" value="{{ otherstrips['travel_id'] }}">
+                                <button class="join" type="submit">Join</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+		  </tbody>
+		</table>
+		<a href="/add_plan" class="">Add travel Plan</a>
+</div>      
+</body>
+</html>

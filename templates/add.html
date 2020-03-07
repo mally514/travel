@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<div class="container">
+		<h1>Add a Trip</h1>
+		<a class="" href="/dashboard">Home</a>
+		<a class="logout" href="/logout">Logout</a>
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+				<div class="alert-danger" role="alert">{{ message }}</div>
+				{% endfor %}
+			{% endif %}	
+		{% endwith %}
+		<form method="POST" action="/add">
+			<label for="Destination">Destination</label>
+			<input type="text" name="Destination" id="Destination" placeholder="">		
+			<label for="Description">Description</label>
+			<textarea type="Description" name="Description" id="Description" placeholder=""></textarea> 
+			<label for="Travel_from">Travel Date From</label>
+			<input type="Date" name="Travel_from" id="Travel_from">
+			<label for="Travel_to">Travel Date To</label>
+			<input type="Date" name="Travel_to" id="Travel_to">
+			<button type="submit">Add</button>
+		</form>
+	</div>
+	
+</body>
+</html>
