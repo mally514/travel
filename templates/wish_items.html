@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Add</title>
+	<title>wishlist</title>
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
 	<div class="container">
-		<h1>Add a Trip</h1>
+		<h1>Create New wish list item</h1>
 		<a class="" href="/dashboard">Home</a>
 		<a class="logout" href="/logout">Logout</a>
 		{% with messages = get_flashed_messages() %}
@@ -17,14 +17,8 @@
 			{% endif %}	
 		{% endwith %}
 		<form method="POST" action="/add">
-			<label for="Destination">Destination</label>
-			<input type="text" name="Destination" id="Destination" placeholder="">		
-			<label for="Description">Description</label>
-			<textarea type="Description" name="Description" id="Description" placeholder=""></textarea> 
-			<label for="Travel_from">Travel Date From</label>
-			<input type="Date" name="Travel_from" id="Travel_from">
-			<label for="Travel_to">Travel Date To</label>
-			<input type="Date" name="Travel_to" id="Travel_to">
+			<label for="item/product">Item / Product</label>
+			<input type="text" name="item/product" id="item/product" placeholder="ex. Iphone">
 			<button type="submit">Add</button>
 		</form>
 	</div>

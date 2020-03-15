@@ -3,7 +3,7 @@
 <head>
 	<head>
 	 <meta charset="UTF-8">
-	    <title>Travel Buddy</title>
+	    <title>Wish list</title>
 	    <meta charset="UTF-8"/>
 	    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 	    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
@@ -30,12 +30,14 @@
 			<input type="password" name="password" id="password">
 			<label for="c_password">Confirm Password</label>
 			<input type="password" name="c_password" id="c_password">
+			<label for="date_hired">Date hired</label>
+			<input type="date" name="date_hired" id="date_hired">
 			<button type="submit">Register</button>
 
 		</form>
 		<form method="post" id="login_form" action="/login">
 		<h5>Login</h5>
-		<label for="username">username</label>
+		<label for="username">Username</label>
 		<input type="username" name="username" id="username" placeholder="">
 		<label for="password">Password</label>
 		<input type="password" name="password" id="password">

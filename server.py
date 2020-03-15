@@ -29,58 +29,17 @@ def register():
 			return redirect('/')
 		else:
 			mysql = connectToMySQL()
-			query = "INSERT INTO users (name, username, password,created_at) VALUES (%(name)s, %(username)s, %(password)s,NOW());"
+			query = "INSERT INTO users (name, username, password,  date_hired, created_at) VALUES (%(name)s, %(username)s, %(password)s, %(date_hired)s,NOW());"
 			data = {
 				"name": request.form['name'],
 				"username": request.form['username'],
 				"password": request.form['password'],
+				"date_hired": request.form['date_hired'],
 			}
 			mysql.query_db(query, data)
+			flash("You just created your password " +  request.form['password'] + " and "+ request.form['username'])
 			return redirect("/")
 
-
-@app.route("/dashboard", methods = ["GET"])
-def dashboard():
-	if 'is_logged_in' in session:
-		if session['is_logged_in'] == True:
-			try:
-				mysql = connectToMySQL()
-				query = "SELECT * FROM users WHERE id = %(id)s LIMIT 1;"
-				data = {
-					"id": session['user_id']
-				}
-
-				user = mysql.query_db(query, data)
-			except Exception as e:
-				flash("Invalid session")
-				return redirect("/")
-			# utc = date.today()
-			mysql = connectToMySQL()
-			query = "SELECT *,users.id as user_id FROM add_travels LEFT JOIN users ON users.id = add_travels.user_id WHERE users.id = %(id)s"
-			data = {
-					"id": session['user_id']
-			}
-			mytrips = mysql.query_db(query,data)
-
-			all_others_id = []
-			if mytrips:
-				for my_trips in mytrips:
-					all_others_id.append(my_trips['user_id'])
-			
-			mysql = connectToMySQL()
-			query = "SELECT *,add_travels.id as travel_id FROM add_travels LEFT JOIN users ON users.id = add_travels.user_id WHERE add_travels.user_id NOT IN  %(all_others_id)s;"
-			data = {
-					"all_others_id": all_others_id,
-			}
-			others_trips = mysql.query_db(query,data)
-			print(others_trips)
-			return render_template("travels.html", user = user, mytrips = mytrips, others_trips = others_trips)
-		else:
-			flash("User is not logged in")
-			return redirect("/")
-	else:
-		flash("User is not logged in")
-		return redirect("/")
 
 @app.route("/login", methods = ["POST"])
 def login():
@@ -123,55 +82,112 @@ def login():
 				flash( "Email does not exist in the database")
 				return redirect("/")
 
-@app.route('/destination/<id>', methods=['GET'])
-def destination(id):
+@app.route("/dashboard", methods = ["GET"])
+def dashboard():
+	if 'is_logged_in' in session:
+		if session['is_logged_in'] == True:
+			try:
+				mysql = connectToMySQL()
+				query = "SELECT * FROM users WHERE id = %(id)s LIMIT 1;"
+				data = {
+					"id": session['user_id']
+				}
+
+				user = mysql.query_db(query, data)
+			except Exception as e:
+				flash("Invalid session")
+				return redirect("/")
+			# utc = date.today()
+			mysql = connectToMySQL()
+			query = "SELECT joins.id as joins_id, joins.wish_item_id as user_ids, users.id as user_id, wish_items.item_product as item_product, users.name as name, wish_items.created_at as created, joins.id as joins_id FROM joins LEFT JOIN wish_items ON wish_items.id = joins.wish_item_id LEFT JOIN users ON users.id = wish_items.user_id WHERE joins.user_id = %(id)s"
+			data = {
+					"id": session['user_id']
+			}
+			myWishlist = mysql.query_db(query,data)
+			# all_others_id = []
+			# if mytrips:
+			# 	for my_trips in mytrips:
+			# 		all_others_id.append(my_trips['user_id'])
+			
+			mysql = connectToMySQL()
+			query = "SELECT *,users.id as user_id, wish_items.id as wish_items_id, wish_items.created_at as created FROM wish_items LEFT JOIN users ON users.id = wish_items.user_id WHERE wish_items.user_id !=  %(user_id)s;"
+			data = {
+					"user_id": session['user_id'],
+			}
+			others_wishlist = mysql.query_db(query,data)
+			print(others_wishlist)
+			return render_template("dashboard.html", user = user, myWishlist = myWishlist, others_wishlist = others_wishlist)
+		else:
+			flash("User is not logged in")
+			return redirect("/")
+	else:
+		flash("User is not logged in")
+		return redirect("/")
+
+@app.route('/wish_items/<id>', methods=['GET'])
+def wishlist(id):
 	mysql = connectToMySQL()
-	query = "SELECT * FROM add_travels left join users on add_travels.user_id = users.id WHERE add_travels.id =  %(id)s;"
+	query = "SELECT * FROM wish_items WHERE wish_items.id =  %(id)s;"
 	data = {
 		"id":{id}
 	}
-	trips_datails = mysql.query_db(query, data)
-	return render_template("destination.html", trips_datails = trips_datails)
+	datails = mysql.query_db(query, data)
+	mysql = connectToMySQL()
+	query = "SELECT * FROM joins left join wish_items on wish_items.id = joins.wish_item_id left join users on users.id = joins.user_id  WHERE joins.wish_item_id =  %(id)s;"
+	data = {
+		"id":{id}
+	}
+	others = mysql.query_db(query, data)
+	print(others)
+	return render_template("wish_list.html",datails = datails, others = others)
 
+@app.route('/delete', methods=['POST'])
+def delete():
+	mysql = connectToMySQL()
+	query = "DELETE FROM wish_items WHERE user_id = %(user_id)s;" 
+	data = {
+			"user_id": request.form['user_id'],
+		}
+	mysql.query_db(query, data)
+	flash("You just deleted!")
+	return redirect('/dashboard')
 
-@app.route('/add_plan', methods=['GET'])
-def add_plan():
-	return render_template("add.html")
+@app.route('/wish_items/create', methods=['GET'])
+def wish_items():
+	return render_template("wish_items.html")
 
 @app.route('/add', methods=['POST'])
 def add():
-	errors = {}
 	today = date.today()
 	if request.method == "POST":
 		try:
-			if  len(request.form['Destination']) < 5:
-				flash("destination should be at least 5 characters")
-			if  len(request.form['Description']) < 10:
-				flash("Description should be at least 10 characters")
-
-			if 	datetime.strptime(request.form['Travel_from'], "%Y-%m-%d").date() < today:
-				flash("Travel date should be future-dated")
-			if 	datetime.strptime(request.form['Travel_to'], "%Y-%m-%d").date() < datetime.strptime(request.form['Travel_from'], "%Y-%m-%d").date():
-				flash("Travel date should not be before the travel date from")
+			if  len(request.form['item/product']) < 5:
+				flash("Product should be at least 5 characters")
 		except Exception as e:
 			flash("Unknown error")
 		if '_flashes' in session.keys():
-			return redirect('/add_plan')
+			return redirect('/wish_items/create')
 		else:
 			mysql = connectToMySQL()
-			query = "INSERT INTO add_travels (user_id, Destination, Description, Date_from, Date_to, created_at) VALUES (%(user_id)s, %(Destination)s, %(Description)s, %(Travel_from)s, %(Travel_to)s,NOW());"
+			query = "INSERT INTO wish_items (user_id, item_product, created_at) VALUES (%(user_id)s,%(item_product)s, NOW());"
 			data = {
 				"user_id": session['user_id'],
-				"Destination": request.form['Destination'],
-				"Description": request.form['Description'],
-				"Travel_from": request.form['Travel_from'],
-				"Travel_to": request.form['Travel_to'],
+				"item_product": request.form['item/product'],
 			}
 			mysql.query_db(query, data)
-			flash("You just created a new event!")
+			flash("You just created a new Product!")
 			return redirect('/dashboard')
 
-
+@app.route('/remove', methods=['POST'])
+def remove():
+	mysql = connectToMySQL()
+	query = "DELETE FROM joins WHERE id = %(user_id)s;" 
+	data = {
+			"user_id": request.form['user_id'],
+		}
+	mysql.query_db(query, data)
+	flash("You just Removed!")
+	return redirect('/dashboard')
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -181,13 +197,13 @@ def logout():
 @app.route('/join', methods=['POST'])
 def joint():
 	mysql = connectToMySQL()
-	query = "INSERT INTO joins (user_id, add_travels_id, created_at) VALUES (%(user_id)s, %(travel_id)s, NOW());"
+	query = "INSERT INTO joins (user_id, wish_item_id, created_at) VALUES (%(user_id)s, %(wish_items_id)s, NOW());"
 	data = {
 		"user_id": session['user_id'],
-		"travel_id":request.form['travel_id'],
+		"wish_items_id":request.form['wish_items_id'],
 	}
 	join = mysql.query_db(query,data)
-	flash("You just joined!")
+	flash("You just added to you wishlist!")
 	return redirect('/dashboard')
 
 

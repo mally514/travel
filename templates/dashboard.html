@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>wishlist</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+        <h1>Hello, {{ user[0]['name'] }}!!</h1>
+        <a href="/logout" class="logout">Logout</a>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert-danger" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %} 
+        {% endwith %}
+        <h1>Your Wish List</h1>
+     	<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">Items</th>
+		      <th scope="col">Add by</th>
+		      <th scope="col">Date added</th>
+		      <th scope="col">Action</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	 {% if myWishlist %}
+                    {% for list in myWishlist %}
+                    <tr>
+                        <td><a href="/wish_items/{{ list['user_ids'] }}" class="">{{ list['item_product'] }}</a></td>
+                        <td>{{ list['name'] }}</td>
+                         <td>{{ list['created'] }}</td>
+                            
+                                 {% if list['user_id'] == user[0]['id'] %}
+                                 <td>
+                                    <form method="post" action="/delete">
+                                        <input type="hidden" name="user_id" value="{{ list['user_id'] }}">
+                                        <button type="submit" class="btn btn-default">
+                                            Delete
+                                        </button>                                   
+                                    </form>
+                                     </td>
+                                {% endif %}
+                           
+                                 {% if list['user_id'] != user[0]['id'] %} 
+                                <td>
+                                    <form method="post" action="/remove">
+                                        <input type="hidden" name="user_id" value="{{ list['joins_id'] }}">
+                                        <button type="submit" class="btn btn-default">
+                                            Remove from my wishlist
+                                        </button>                                   
+                                    </form>
+                                      </td>
+                                {% endif %}
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+		  </tbody>
+		</table>
+		<h1>Others Users Wish List</h1>
+     	<table class="table">
+		  <thead>
+		    <tr>
+		      <th scope="col">Items</th>
+              <th scope="col">Add by</th>
+              <th scope="col">Date added</th>
+              <th scope="col">Action</th>
+		    </tr>
+		  </thead>
+        <tbody>
+             {% if others_wishlist %}
+                    {% for list in others_wishlist %}
+                    <tr>
+                        <td><a href="/wish_items/{{ list['wish_items_id'] }}" class="">{{ list['item_product'] }}</a></td>
+                        <td>{{ list['name'] }}</td>
+                         <td>{{ list['created'].strftime('%m-%d-%Y') }}</td>
+                            <td>
+                                <form method="post" action="/join">
+                                        <input type="hidden" name="wish_items_id" value="{{ list['wish_items_id'] }}">
+                                        <button type="submit" class="btn btn-default">
+                                            Add to my Wishlist
+                                        </button>                                   
+                                </form>
+                            </td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+		</tbody>
+        </table>
+		<a href="/wish_items/create" class="">Add item</a>
+</div>      
+</body>
+</html>

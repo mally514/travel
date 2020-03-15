@@ -46,97 +46,6 @@ body .container {
   width: 560px;
   position: relative;
 }
-body .container .container {
-  width: 174px;
-  display: inline-block;
-  vertical-align: top;
-  text-align: center;
-  margin-top: 14px;
-  margin-right: 14px;
-}
-body .container .container h4 {
-  font-family: Helvetica;
-  font-size: 14px;
-  color: #313B57;
-  margin-bottom: 10px;
-}
-body .container .container .agree_item,
-body .container .container .neutral_item,
-body .container .container .disagree_item {
-  background-color: #fff;
-  border: 1px solid #D6E0F9;
-  border-radius: 9px;
-  padding: 14px;
-  text-align: left;
-  margin-bottom: 14px;
-}
-body .container .container .agree_item p,
-body .container .container .neutral_item p,
-body .container .container .disagree_item p {
-  display: block;
-  margin-bottom: 10px;
-}
-body .container .container .agree_item p a,
-body .container .container .neutral_item p a,
-body .container .container .disagree_item p a {
-  background-color: transparent;
-  padding: 0px;
-  vertical-align: middle;
-  color: #9398A8;
-}
-body .container .container .agree_item .user,
-body .container .container .neutral_item .user,
-body .container .container .disagree_item .user {
-  display: inline-block;
-  vertical-align: top;
-  width: 68px;
-  margin-top: 2px;
-}
-body .container .container .agree_item form,
-body .container .container .neutral_item form,
-body .container .container .disagree_item form {
-  display: inline-block;
-  vertical-align: top;
-}
-body .container .container .agree_item button,
-body .container .container .neutral_item button,
-body .container .container .disagree_item button {
-  float: none !important;
-  margin-top: 5px;
-}
-body .container .container .agree_item a,
-body .container .container .neutral_item a,
-body .container .container .disagree_item a {
-  display: inline-block;
-  vertical-align: top;
-  background-color: #DBE6FF;
-  padding: 10px;
-  border-radius: 9px;
-  color: #313B57;
-  font-size: 12px;
-  font-family: Helvetica;
-  text-decoration: none;
-}
-body .container .container .agree_item .points,
-body .container .container .neutral_item .points,
-body .container .container .disagree_item .points {
-  display: inline-block;
-  vertical-align: top;
-  padding: 6px;
-  width: 68px;
-  text-align: center;
-}
-body .container .container .agree_item .row,
-body .container .container .neutral_item .row,
-body .container .container .disagree_item .row {
-  text-align: right;
-}
-body .container .container .disagree_item {
-  margin-right: 0px;
-}
-body .container .container:nth-child(6) {
-  margin-right: 0px !important;
-}
 body .container h5 {
   color: #313B57;
   font-family: Helvetica;
@@ -173,25 +82,6 @@ body .container form textarea:focus {
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
   transition: 0.5s;
-}
-body .container form select[name="stance"] {
-  width: auto;
-  color: #6DB1FF;
-  border: 1px solid transparent;
-  cursor: pointer;
-  padding: 4px 6px;
-  margin: 0px 2px;
-  margin-bottom: 5px;
-}
-body .container form select[name="stance"]:hover {
-  background-color: #fff;
-  border: 1px solid #6DB1FF;
-  transition: 0.21s;
-}
-body .container form span {
-  font-family: Helvetica;
-  color: #313B57;
-  font-size: 14px;
 }
 body .container .textarea-form h5 {
   text-align: left;
@@ -237,29 +127,6 @@ body .container form[action="/create-topic"] {
 body .container form[action="/create-topic"] textarea {
   background-color: #F7F9FE;
   margin-bottom: 10px;
-}
-body .container form[action="/create-argument"] {
-  border-top: 1px solid #D6E0F9;
-  padding-top: 14px;
-  margin-top: 10px;
-}
-body .container form[action="/upvote"] button {
-  background-color: #5FD9A4;
-}
-body .container form[action="/upvote"] button:hover {
-  background-color: #349a6e;
-}
-body .container form[action="/downvote"] button {
-  background-color: #FA9494;
-}
-body .container form[action="/downvote"] button:hover {
-  background-color: #d56565;
-}
-body p {
-  font-family: Helvetica;
-  font-size: 12px;
-  color: #9398A8;
-  line-height: 20px;
 }
 body input {
   background-color: #F7F9FE;
@@ -344,7 +211,24 @@ body .logout {
   border-radius: 0px 9px 9px 0px;
   border-left: 1px solid transparent;
 }
-body .logout:hover {
+
+body .host {
+  position: absolute;
+  top: 0px;
+  right: 50px;
+  color: #6DB1FF;
+  text-decoration: none;
+  font-family: Helvetica;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+  vertical-align: top;
+  background-color: transparent;
+  height: 48px;
+  padding: 18px;
+  border-left: 1px solid transparent;  
+}
+body .logout:hover, .host:hover {
   background-color: #6DB1FF;
   color: #fff;
   transition: 0.21s;
@@ -449,31 +333,6 @@ body .alert-success {
     margin: 0px;
     width: 100%;
     margin-bottom: 14px;
-  }
-  body .container .container {
-    width: 100%;
-  }
-  body .container .container .agree_item,
-  body .container .container .neutral_item,
-  body .container .container .disagree_item {
-    margin-right: 0px;
-    display: inline-block;
-    vertical-align: top;
-  }
-  body .container .container .agree_item button,
-  body .container .container .neutral_item button,
-  body .container .container .disagree_item button {
-    margin-top: 0px;
-  }
-  body .container .container .agree_item .points,
-  body .container .container .neutral_item .points,
-  body .container .container .disagree_item .points {
-    margin-right: 20px;
-  }
-  body .container .container .agree_item .row,
-  body .container .container .neutral_item .row,
-  body .container .container .disagree_item .row {
-    margin-top: 10px;
   }
   body table {
     width: 100%;

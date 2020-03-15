@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>wishlist</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="container">
+       <h1>{{ datails[0]['item_product'] }}</h1>
+        <a href="/dashboard" class="">Home</a>
+        <a href="/logout" class="logout">Logout</a>
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert-danger" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %} 
+        {% endwith %}
+        <h1>Your who added this product/item under their wish list</h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+            </tr>
+          </thead>
+          <tbody>
+                {% if others %}
+                    {% for list in others %}
+                    <tr>
+                        <td>{{ list['name'] }}</td>
+                    </tr>
+                    {% endfor %}
+                {% endif %}
+          </tbody>
+      </table>
+</div>      
+</body>
+</html>
